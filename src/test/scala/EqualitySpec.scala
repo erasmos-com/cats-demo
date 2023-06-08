@@ -1,6 +1,5 @@
-import Equality.ColouredShape
-import Equality.ColouredShape.colouredShapeEq
-import Equality.ExtensionMethodWrappers.equalUsingExtensionMethod
+import EqualitySpec.ColouredShape
+import EqualitySpec.ColouredShape.colouredShapeEq
 
 /** The standard equality checks are not type-safe.
   *
@@ -41,7 +40,9 @@ class EqualitySpec extends DemoSpec {
           }
           "extension method, when" - {
             "equal" in {
-              val result = equalUsingExtensionMethod(2, 3)
+              import cats.instances.int._
+              import cats.syntax.eq._
+              val result = 2 eqv 3
               result shouldBe false
             }
             "not equal" in {
@@ -78,8 +79,10 @@ class EqualitySpec extends DemoSpec {
             }
             "extension method, when" - {
               "equal" in {
-                val result =
-                  equalUsingExtensionMethod(List(1, 2, 3), List(3, 4, 5))
+                import cats.instances.int._
+                import cats.instances.list._
+                import cats.syntax.eq._
+                val result = List(1, 2, 3) eqv List(3, 4, 5)
                 result shouldBe false
               }
               "not equal" in {
@@ -108,7 +111,8 @@ class EqualitySpec extends DemoSpec {
           }
           "extension method, when" - {
             "equal" in {
-              val result = equalUsingExtensionMethod(redSquare, yellowSquare)
+              import cats.syntax.eq._
+              val result = redSquare eqv yellowSquare
               result shouldBe true
             }
             "not equal" in {
@@ -120,5 +124,20 @@ class EqualitySpec extends DemoSpec {
         }
       }
     }
+  }
+}
+
+object EqualitySpec {
+
+  case class ColouredShape(shape: String, colour: String)
+
+  object ColouredShape {
+
+    import cats.Eq
+
+    implicit val colouredShapeEq: Eq[ColouredShape] =
+      Eq.instance[ColouredShape] { (first, second) =>
+        first.shape == second.shape
+      }
   }
 }
