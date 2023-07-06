@@ -5,7 +5,7 @@ import MonoidSpec.{Dimensions, dimensionsMonoid, genericFold}
   */
 class MonoidSpec extends DemoSpec {
 
-  "monoids apply to different types, such as" - {
+  "Monoids apply to different types, such as" - {
     "an int" - {
       "where it provides" - {
         "an empty value" in {
